@@ -1,5 +1,5 @@
 import { database } from "../server.js";
-const COLLECTION_ID = "61319d3498a39";
+const COLLECTION_ID = "";
 
 export const createRecipe = async (req, res) => {
   const { name, recipe, ingredients } = req.body;
