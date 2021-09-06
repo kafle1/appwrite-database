@@ -17,9 +17,15 @@ In Quick Recipes, you can add new recipes, edit and delete them. It uses Appwrit
   
 ## Run Test
 
-Install docker in your pc and install [appwrite](https://appwrite.io/) in this folder. Then open terminal and run ``cd server``. Then open another terminal and run ``cd client``.
+1. Install docker in your pc and install [appwrite](https://appwrite.io/) in this folder. Then open terminal and run ``cd server``. Then open another terminal and run ``cd client``.
 
-Now in client terminal. Run the code:
+2. Then add your project id, secret key(You can create new api key from dashboard), and API endpoint in quick-recipes/server/server.js.
+
+3. Then create collection in your appwrite with these setting ( Set both permissions to * ) and copy your collection id to quick-recipes/server/controllers/recipeControllers.js.
+[See Settings](https://ibb.co/5WCfwSBhttps://ibb.co/5WCfwSB)
+
+
+4. Now in client terminal. Run the code:
 
 ```bash
   npm start
