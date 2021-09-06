@@ -23,7 +23,7 @@ let client = new sdk.Client();
 export const database = new sdk.Database(client);
 
 client
-  .setEndpoint("http://localhost/v1") // Your API Endpoint
+  .setEndpoint("") // Your API Endpoint
   .setProject("") // Your project ID
   .setKey(
     ""
