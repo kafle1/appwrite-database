@@ -19,7 +19,7 @@ export const createRecipe = async (req, res) => {
 
 export const showRecipes = async (req, res) => {
   try {
-    const data = await database.listDocuments(COLLECTION_ID, undefined, undefined, undefined, undefined, "DESC" );
+    const data = await database.listDocuments(COLLECTION_ID, undefined, undefined, undefined, "created_date", "DESC" );
     res.status(200).json(data);
   } catch (err) {
     res.status(400).json({ error: err.message });
