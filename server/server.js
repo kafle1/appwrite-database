@@ -1,8 +1,10 @@
 //IMPORTS
 import express from "express";
 import router from "./routes/routes.js";
-import sdk from "node-appwrite";
 import cors from "cors";
+import { Client, Storage, Database } from 'node-appwrite';
+
+
 
 const app = express();
 
@@ -14,13 +16,16 @@ app.use(cors());
 //CONSTANTS
 const PORT = process.env.PORT || 5000;
 
-//MIDDLEWARES
+//MIDDLEWARES / PAGES
 app.use("/", router);
 
-//CONNECTION WITH APPWRITE DATABASE
+//CONNECTION WITH APPWRITE
+let client = new Client();
 
-let client = new sdk.Client();
-export const database = new sdk.Database(client);
+export const storage = new Storage(client);
+export const database = new Database(client);
+
+
 
 client
   .setEndpoint("http://localhost/v1") // Your API Endpoint

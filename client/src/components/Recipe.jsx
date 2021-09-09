@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {  storage } from "../db/appwriteConfig";
+import Login from "./Login";
 
 const Recipe = () => {
   const [recipes, setRecipes] = useState([]);
+  const [recipeImage, setRecipeImage] = useState(null);
   const [newRecipe, setNewRecipe] = useState({
     name: "",
     ingredients: "",
@@ -31,20 +34,29 @@ const Recipe = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [recipes]);
+  }, []);
+  console.log(recipes);
 
   const createNewRecipe = (e) => {
     e.preventDefault();
+
+    const details = JSON.stringify(newRecipe);
+
+    const data = new FormData();
+    data.append("details", details);
+    data.append("image", recipeImage);
+
     axios
-      .post("http://localhost:5000/api/v1/createRecipe", newRecipe)
-      .then((addedRecipe) => {
-        console.log(addedRecipe);
+      .post("http://localhost:5000/api/v1/createRecipe", data)
+      .then((res) => {
+        console.log(res.data);
         setSuccess(" New Recipe added Successfully !");
       })
       .catch((err) => {
         setError("Failed to add new Recipe !");
         console.log(err);
       });
+
     setNewRecipe({
       name: "",
       ingredients: "",
@@ -52,13 +64,24 @@ const Recipe = () => {
     });
     setError("");
     setSuccess("");
+    setRecipeImage(null);
+    e.target.value = null;
+    window.location.reload(false);
   };
 
-  const deleteRecipe = (id) => {
+  const deleteRecipe = (docId, imageId) => {
     axios
-      .delete(`http://localhost:5000/api/v1/deleteRecipe/${id}`)
+      .delete(`http://localhost:5000/api/v1/deleteRecipe/${docId}`)
       .then((res) => {
         alert("Recipe Deleted Successfully !");
+        storage
+          .deleteFile(imageId)
+          .then(() => {
+            window.location.reload(false);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         alert("Uh Oh!, Error Occured : Recipe Could not be deleted !");
@@ -91,6 +114,7 @@ const Recipe = () => {
       ...updateDetails,
       status: false,
     });
+    window.location.reload(false);
   };
 
   //MAKES THE UPDATE FORM SO THAT USERS CAN EDIT THE EXISTING DATA
@@ -120,6 +144,7 @@ const Recipe = () => {
     <div>
       <div>
         <br />
+        <Login/>
         <form className="container-lg my-10">
           <h2>{updateDetails.status ? "Update Recipe" : "Create Recipe"}</h2>
           <div className="form-group">
@@ -168,7 +193,7 @@ const Recipe = () => {
             />
           </div>
 
-          <div class="form-group">
+          <div className="form-group">
             <label for="exampleFormControlTextarea1">Recipe</label>
             <textarea
               required
@@ -190,6 +215,23 @@ const Recipe = () => {
               }
             ></textarea>
           </div>
+
+          {/* Upload image */}
+
+          <div className="form-group">
+            <label for="recipe-image">Upload Food's Image</label>
+            <input
+              type="file"
+              name="image"
+              className="form-control-file"
+              id="image"
+              onChange={(e) => {
+                const image = e.target.files[0];
+                setRecipeImage(image);
+              }}
+            />
+          </div>
+
           <div>{error && <p className="text-danger"> {error} </p>}</div>
           <div>{success && <p className="text-success"> {success} </p>}</div>
           <button
@@ -218,6 +260,7 @@ const Recipe = () => {
           <table className="table table-bordered">
             <thead className="thead-dark">
               <tr>
+                <th scope="col"> Food Preview </th>
                 <th scope="col">Food Name</th>
                 <th scope="col">Ingredients</th>
                 <th scope="col">Recipe</th>
@@ -226,14 +269,20 @@ const Recipe = () => {
             </thead>
             <tbody>
               {recipes.map((recipe) => (
-                <tr>
+                <tr key={recipe.id}>
+                  <td>
+                    <img
+                      src={storage.getFilePreview(recipe.image, 150, 100)}
+                      alt="recipe"
+                    />
+                  </td>
                   <td>{recipe.name}</td>
                   <td>{recipe.ingredients}</td>
                   <td>{recipe.recipe}</td>
 
                   <td className="d-flex border-bottom-0 border-right-0 border-left-0">
                     <button
-                      onClick={() => deleteRecipe(recipe.$id)}
+                      onClick={() => deleteRecipe(recipe.$id, recipe.image)}
                       type="button"
                       class="btn btn-danger mx-1"
                     >
