@@ -1,4 +1,4 @@
-import { storage, database } from "../server.js";
+import { storage, database, account } from "../server.js";
 import { createReadStream } from "fs";
 
 const COLLECTION_ID = "61319d3498a39";
@@ -26,10 +26,16 @@ export const createRecipe = async (req, res) => {
       created_date: Date.now(),
       image: createdImage.$id,
     };
+
+    // const user = await account.get();
+
+    // console.log(user);
+
     const createdData = await database.createDocument(COLLECTION_ID, newRecipe);
 
     res.status(201).json({ createdData, createdImage });
   } catch (err) {
+    console.log(err);
     res.status(400).json({ error: err.message });
   }
 };

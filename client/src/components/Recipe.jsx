@@ -3,7 +3,7 @@ import axios from "axios";
 import {  storage } from "../db/appwriteConfig";
 import Login from "./Login";
 
-const Recipe = () => {
+const Recipe = ({loggedIn}) => {
   const [recipes, setRecipes] = useState([]);
   const [recipeImage, setRecipeImage] = useState(null);
   const [newRecipe, setNewRecipe] = useState({
@@ -143,8 +143,9 @@ const Recipe = () => {
   return (
     <div>
       <div>
-        <br />
-        <Login/>
+       
+       
+        <Login logStatus={loggedIn} />
         <form className="container-lg my-10">
           <h2>{updateDetails.status ? "Update Recipe" : "Create Recipe"}</h2>
           <div className="form-group">
