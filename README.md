@@ -1,5 +1,5 @@
 
-# Quick Recipes - Appwrite  Database
+# Quick Recipes - Appwrite  Database (CRUD)
 
 In Quick Recipes, you can add new recipes, edit and delete them. It uses Appwrite Database to store your data.
 
