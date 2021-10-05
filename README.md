@@ -3,6 +3,8 @@
 
 In Quick Recipes, you can add new recipes, edit and delete them. It uses Appwrite Database to store your data.
 
+[Video](https://www.youtube.com/watch?v=MH4udoCtaZ8&t=10s)
+
 ## Preview
 
 ![App Screenshot](https://i.ibb.co/TRqDV5z/Screenshot-from-2021-09-06-18-42-59.png)
